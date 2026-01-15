@@ -32,30 +32,19 @@ RUN apt-get update && apt-get install -y \
     bat \
     fd-find \
     tldr \
-    dig \
-    dnsutils \
-    netcat \
-    nmap \
-    traceroute \
-    mtr \
-    iputils-ping \
-    telnet \
-    nethogs \
-    iftop \
-    tcpdump \
-    iperf3 \
-    ss \
-    net-tools \
+    \
+    dig dnsutils netcat \
+    nmap traceroute mtr \
+    iputils-ping telnet \
+    nethogs iftop tcpdump iperf3 \
+    ss net-tools \
+    \
     build-essential \
-    python3 \
-    python3-pip \
-    python3-venv \
-    nodejs \
-    npm \
+    python3 python3-pip python3-venv \
+    nodejs npm \
     openssh-server \
     ca-certificates \
-    gnupg \
-    lsb-release \
+    gnupg lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Claude Code CLI
