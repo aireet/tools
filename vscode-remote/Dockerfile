@@ -43,12 +43,16 @@ RUN apt-get update && apt-get install -y \
     python3 python3-pip python3-venv \
     nodejs npm \
     openssh-server \
+    zsh \
     ca-certificates \
     gnupg lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
+
+# Install oh-my-zsh
+RUN -- sh -c 'curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh'
 
 # Install Docker CLI for running Docker inside container
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
