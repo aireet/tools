@@ -6,8 +6,10 @@ IMAGE_NAME="vscode-remote"
 CONTAINER_NAME="vscode-dev"
 # SSH 端口映射 (本地端口:容器端口)
 SSH_PORT=2222
-# 用户密码 (默认: vscode)
-USER_PASSWORD=${1:-vscode}
+# 用户名
+SSH_USER="root"
+# root 密码 (默认: root)
+ROOT_PASSWORD=${1:-root}
 
 # 创建持久化目录
 echo "创建持久化目录..."
@@ -29,18 +31,17 @@ docker run -d \
     --name $CONTAINER_NAME \
     --restart unless-stopped \
     -p $SSH_PORT:22 \
-    -v $HOME/.vscode-remote/pip:/home/vscode/.local/lib/python3.10/site-packages \
+    -v $HOME/.vscode-remote/pip:/root/.local/lib/python3.12/site-packages \
     -v $HOME/.vscode-remote/pip-cache:/root/.cache/pip \
-    -v $HOME/.vscode-remote/npm:/home/vscode/.npm \
-    -v $HOME/.vscode-remote/go:/home/vscode/go \
-    -v $HOME/.vscode-remote/project:/home/vscode/project \
+    -v $HOME/.vscode-remote/npm:/root/.npm \
+    -v $HOME/.vscode-remote/go:/root/go \
+    -v $HOME/.vscode-remote/project:/root/project \
     --hostname vscode-remote \
-    -e USER_PASSWORD=$USER_PASSWORD \
     $IMAGE_NAME
 
-# 设置密码 (如果与镜像默认密码不同)
-if [ "$USER_PASSWORD" != "vscode" ]; then
-    docker exec $CONTAINER_NAME bash -c "echo vscode:$USER_PASSWORD | chpasswd"
+# 设置 root 密码 (如果与默认密码不同)
+if [ "$ROOT_PASSWORD" != "root" ]; then
+    docker exec $CONTAINER_NAME bash -c "echo root:$ROOT_PASSWORD | chpasswd"
 fi
 
 echo ""
@@ -49,8 +50,8 @@ echo "容器启动成功！"
 echo "==================================="
 echo "容器名称: $CONTAINER_NAME"
 echo "SSH 端口: $SSH_PORT"
-echo "用户名: vscode"
-echo "密码: $USER_PASSWORD"
+echo "用户名: $SSH_USER"
+echo "密码: $ROOT_PASSWORD"
 echo "重启策略: unless-stopped (自动重启)"
 echo ""
 echo "持久化目录:"
@@ -65,5 +66,5 @@ echo ""
 echo "Host vscode-remote"
 echo "    HostName localhost"
 echo "    Port $SSH_PORT"
-echo "    User vscode"
+echo "    User $SSH_USER"
 echo "==================================="
