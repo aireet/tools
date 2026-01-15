@@ -32,6 +32,7 @@ mkdir -p "$DATA_DIR/project"
 mkdir -p "$DATA_DIR/vscode-server"
 mkdir -p "$DATA_DIR/claude"
 mkdir -p "$DATA_DIR/ssh-keys"
+mkdir -p "$DATA_DIR/py-venvs"
 
 # 复制 Claude Code settings
 if [ ! -f "$DATA_DIR/claude/settings.json" ]; then
@@ -58,6 +59,7 @@ docker run -d \
     -v $DATA_DIR/workspace:/root/workspace \
     -v $DATA_DIR/project:/root/project \
     -v $DATA_DIR/vscode-server:/root/.vscode-server \
+    -v $DATA_DIR/py-venvs:/root/py-venvs \
     -v $DATA_DIR/claude:/root/.claude \
     -v $DATA_DIR/ssh-keys:/root/.ssh/authorized_keys.d:ro \
     -e ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-} \
