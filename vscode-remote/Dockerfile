@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y \
     sudo \
     curl \
     wget \
-    git \
     vim \
     nano \
     tmux \
