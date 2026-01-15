@@ -32,6 +32,20 @@ RUN apt-get update && apt-get install -y \
     bat \
     fd-find \
     tldr \
+    dig \
+    dnsutils \
+    netcat \
+    nmap \
+    traceroute \
+    mtr \
+    iputils-ping \
+    telnet \
+    nethogs \
+    iftop \
+    tcpdump \
+    iperf3 \
+    ss \
+    net-tools \
     build-essential \
     python3 \
     python3-pip \
