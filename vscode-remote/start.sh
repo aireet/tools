@@ -17,9 +17,7 @@ DATA_DIR="$HOME/.vscode-remote"
 # Claude Code
 ANTHROPIC_BASE_URL=""
 ANTHROPIC_AUTH_TOKEN=""
-ANTHROPIC_DEFAULT_SONNET_MODEL=""
-ANTHROPIC_DEFAULT_OPUS_MODEL=""
-ANTHROPIC_DEFAULT_HAIKU_MODEL=""
+
 
 # 创建持久化目录
 echo "创建持久化目录..."
@@ -27,6 +25,7 @@ mkdir -p "$DATA_DIR/pip"
 mkdir -p "$DATA_DIR/pip-cache"
 mkdir -p "$DATA_DIR/npm"
 mkdir -p "$DATA_DIR/go"
+mkdir -p "$DATA_DIR/go-env"
 mkdir -p "$DATA_DIR/workspace"
 mkdir -p "$DATA_DIR/project"
 mkdir -p "$DATA_DIR/vscode-server"
@@ -56,17 +55,16 @@ docker run -d \
     -v $DATA_DIR/pip-cache:/root/.cache/pip \
     -v $DATA_DIR/npm:/root/.npm \
     -v $DATA_DIR/go:/root/go \
+    -v $DATA_DIR/go-env:/root/.config/go \
     -v $DATA_DIR/workspace:/root/workspace \
     -v $DATA_DIR/project:/root/project \
     -v $DATA_DIR/vscode-server:/root/.vscode-server \
     -v $DATA_DIR/py-venvs:/root/py-venvs \
     -v $DATA_DIR/claude:/root/.claude \
     -v $DATA_DIR/ssh-keys:/root/.ssh/authorized_keys.d:ro \
-    -e ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-} \
-    -e ANTHROPIC_AUTH_TOKEN=${ANTHROPIC_AUTH_TOKEN:-} \
-    -e ANTHROPIC_DEFAULT_SONNET_MODEL=${ANTHROPIC_DEFAULT_SONNET_MODEL:-} \
-    -e ANTHROPIC_DEFAULT_OPUS_MODEL=${ANTHROPIC_DEFAULT_OPUS_MODEL:-} \
-    -e ANTHROPIC_DEFAULT_HAIKU_MODEL=${ANTHROPIC_DEFAULT_HAIKU_MODEL:-} \
+    -e ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL} \
+    -e ANTHROPIC_AUTH_TOKEN=${ANTHROPIC_AUTH_TOKEN} \
+
     --hostname vscode-remote \
     $IMAGE_NAME
 
@@ -90,6 +88,7 @@ echo "  - pip 包: $DATA_DIR/pip"
 echo "  - pip 缓存: $DATA_DIR/pip-cache"
 echo "  - npm 包: $DATA_DIR/npm"
 echo "  - go 包: $DATA_DIR/go"
+echo "  - go env: $DATA_DIR/go-env"
 echo "  - workspace: $DATA_DIR/workspace"
 echo "  - vscode-server: $DATA_DIR/vscode-server"
 echo "  - claude: $DATA_DIR/claude"
