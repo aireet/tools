@@ -23,6 +23,15 @@ RUN apt-get update && apt-get install -y \
     git \
     vim \
     nano \
+    tmux \
+    htop \
+    jq \
+    tree \
+    ripgrep \
+    fzf \
+    bat \
+    fd-find \
+    tldr \
     build-essential \
     python3 \
     python3-pip \
