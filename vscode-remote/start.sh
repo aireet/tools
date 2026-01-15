@@ -31,7 +31,13 @@ mkdir -p "$DATA_DIR/project"
 mkdir -p "$DATA_DIR/vscode-server"
 mkdir -p "$DATA_DIR/claude"
 mkdir -p "$DATA_DIR/ssh-keys"
+mkdir -p "$DATA_DIR/git-config"
 mkdir -p "$DATA_DIR/py-venvs"
+
+# 复制 Git 配置
+if [ -f ~/.gitconfig ]; then
+    cp ~/.gitconfig "$DATA_DIR/git-config/config"
+fi
 
 # 复制 Claude Code settings
 if [ ! -f "$DATA_DIR/claude/settings.json" ]; then
@@ -56,6 +62,7 @@ docker run -d \
     -v $DATA_DIR/npm:/root/.npm \
     -v $DATA_DIR/go:/root/go \
     -v $DATA_DIR/go-env:/root/.config/go \
+    -v $DATA_DIR/git-config:/root/.gitconfig \
     -v $DATA_DIR/workspace:/root/workspace \
     -v $DATA_DIR/project:/root/project \
     -v $DATA_DIR/vscode-server:/root/.vscode-server \
@@ -89,6 +96,7 @@ echo "  - pip 缓存: $DATA_DIR/pip-cache"
 echo "  - npm 包: $DATA_DIR/npm"
 echo "  - go 包: $DATA_DIR/go"
 echo "  - go env: $DATA_DIR/go-env"
+echo "  - git config: $DATA_DIR/git-config"
 echo "  - workspace: $DATA_DIR/workspace"
 echo "  - vscode-server: $DATA_DIR/vscode-server"
 echo "  - claude: $DATA_DIR/claude"
