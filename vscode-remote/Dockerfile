@@ -4,8 +4,12 @@ FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/mcr.microsoft.com/devcontainers/cp
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Use Aliyun mirror for Ubuntu
-RUN sed -i 's|http://archive.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.ubuntu.com|https://mirrors.aliyun.com|g' /etc/apt/sources.list
+RUN rm -f /etc/apt/sources.list.d/* && \
+    echo "deb https://mirrors.aliyun.com/ubuntu/ noble main restricted universe multiverse" > /etc/apt/sources.list && \
+    echo "deb https://mirrors.aliyun.com/ubuntu/ noble-security main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb https://mirrors.aliyun.com/ubuntu/ noble-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb https://mirrors.aliyun.com/ubuntu/ noble-backports main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb https://mirrors.aliyun.com/ubuntu/ noble-proposed main restricted universe multiverse" >> /etc/apt/sources.list
 
 # Set timezone
 ENV TZ=Asia/Shanghai
@@ -51,11 +55,13 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG USER_PASSWORD=vscode
 
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && echo $USERNAME:$USER_PASSWORD | chpasswd \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
+RUN if ! id -u $USERNAME >/dev/null 2>&1; then \
+        groupadd --gid $USER_GID $USERNAME; \
+        useradd --uid $USER_UID --gid $USER_GID -m $USERNAME; \
+    fi && \
+    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
+    echo $USERNAME:$USER_PASSWORD | chpasswd && \
+    chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Setup SSH server for remote connection
 RUN mkdir -p /var/run/sshd \

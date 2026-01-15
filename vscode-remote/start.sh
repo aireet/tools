@@ -16,7 +16,9 @@ echo "创建持久化目录..."
 mkdir -p $HOME/.vscode-remote/pip
 mkdir -p $HOME/.vscode-remote/npm
 mkdir -p $HOME/.vscode-remote/go
+mkdir -p $HOME/.vscode-remote/workspace
 mkdir -p $HOME/.vscode-remote/project
+mkdir -p $HOME/.vscode-remote/vscode-server
 
 # 停止并删除已存在的容器
 if docker ps -a | grep -q $CONTAINER_NAME; then
@@ -35,7 +37,9 @@ docker run -d \
     -v $HOME/.vscode-remote/pip-cache:/root/.cache/pip \
     -v $HOME/.vscode-remote/npm:/root/.npm \
     -v $HOME/.vscode-remote/go:/root/go \
+    -v $HOME/.vscode-remote/workspace:/root/workspace \
     -v $HOME/.vscode-remote/project:/root/project \
+    -v $HOME/.vscode-remote/vscode-server:/root/.vscode-server \
     --hostname vscode-remote \
     $IMAGE_NAME
 
@@ -59,6 +63,8 @@ echo "  - pip 包: $HOME/.vscode-remote/pip"
 echo "  - pip 缓存: $HOME/.vscode-remote/pip-cache"
 echo "  - npm 包: $HOME/.vscode-remote/npm"
 echo "  - go 包: $HOME/.vscode-remote/go"
+echo "  - workspace: $HOME/.vscode-remote/workspace"
+echo "  - vscode-server: $HOME/.vscode-remote/vscode-server"
 echo "  - 项目目录: $HOME/.vscode-remote/project"
 echo ""
 echo "VSCode SSH 连接配置 (~/.ssh/config):"
