@@ -48,6 +48,12 @@ RUN apt-get update && apt-get install -y \
     gnupg lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Rust via rustup
+RUN -- sh -c 'curl --proto =https https://sh.rustup.rs | sh' && \
+    . "$HOME/.cargo/env" && \
+    rustup default stable && \
+    rustup component add rust-src rust-analyzer clippy rustfmt
+
 # Install Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
 
