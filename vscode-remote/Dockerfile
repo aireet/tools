@@ -67,9 +67,10 @@ RUN if ! id -u $USERNAME >/dev/null 2>&1; then \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Setup SSH server for remote connection
-RUN mkdir -p /var/run/sshd \
+RUN mkdir -p /var/run/sshd /root/.ssh/authorized_keys.d \
     && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config \
-    && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+    && echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config \
+    && echo 'AuthorizedKeysFile /root/.ssh/authorized_keys.d/keys' >> /etc/ssh/sshd_config
 
 # Set root password (change this for production!)
 RUN echo 'root:root' | chpasswd

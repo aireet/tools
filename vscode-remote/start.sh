@@ -24,6 +24,7 @@ mkdir -p "$DATA_DIR/workspace"
 mkdir -p "$DATA_DIR/project"
 mkdir -p "$DATA_DIR/vscode-server"
 mkdir -p "$DATA_DIR/claude"
+mkdir -p "$DATA_DIR/ssh-keys"
 
 # 停止并删除已存在的容器
 if docker ps -a | grep -q $CONTAINER_NAME; then
@@ -46,6 +47,7 @@ docker run -d \
     -v $DATA_DIR/project:/root/project \
     -v $DATA_DIR/vscode-server:/root/.vscode-server \
     -v $DATA_DIR/claude:/root/.claude \
+    -v $DATA_DIR/ssh-keys:/root/.ssh/authorized_keys.d:ro \
     -e ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-} \
     -e ANTHROPIC_AUTH_TOKEN=${ANTHROPIC_AUTH_TOKEN:-} \
     -e ANTHROPIC_DEFAULT_SONNET_MODEL=${ANTHROPIC_DEFAULT_SONNET_MODEL:-} \
@@ -77,6 +79,7 @@ echo "  - go 包: $DATA_DIR/go"
 echo "  - workspace: $DATA_DIR/workspace"
 echo "  - vscode-server: $DATA_DIR/vscode-server"
 echo "  - claude: $DATA_DIR/claude"
+echo "  - ssh-keys: $DATA_DIR/ssh-keys (添加公钥到此目录可免密登录)"
 echo "  - 项目目录: $DATA_DIR/project"
 echo ""
 echo "VSCode SSH 连接配置 (~/.ssh/config):"
