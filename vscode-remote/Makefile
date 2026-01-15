@@ -63,7 +63,7 @@ start: $(DATA_DIR)
 		--hostname vscode-remote \
 		$(IMAGE_NAME)
 	@if [ "$(ROOT_PASSWORD)" != "root" ]; then \
-		docker exec $(CONTAINER_NAME) bash -c "echo root:$(ROOT_PASSWORD) | chpasswd"; \
+		docker exec $(CONTAINER_NAME) bash -c "echo root:$$ROOT_PASSWORD | chpasswd"; \
 	fi
 	@echo ""
 	@echo "$(COLOR_BOLD)===================================${COLOR_RESET}"
