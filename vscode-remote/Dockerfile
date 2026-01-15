@@ -80,7 +80,8 @@ RUN if ! id -u $USERNAME >/dev/null 2>&1; then \
     fi && \
     echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
     echo $USERNAME:$USER_PASSWORD | chpasswd && \
-    chmod 0440 /etc/sudoers.d/$USERNAME
+    chmod 0440 /etc/sudoers.d/$USERNAME && \
+    sed -i 's|root:.*|root:/bin/zsh|' /etc/passwd
 
 # Setup SSH server for remote connection
 RUN mkdir -p /var/run/sshd /root/.ssh/authorized_keys.d \
