@@ -11,13 +11,20 @@
   - Python 3 + pip + venv
   - Node.js + npm
   - Go 1.25.0
+  - Rust (via rustup)
   - Docker CLI
   - Claude Code CLI
+  - zsh + oh-my-zsh
+  - CLI 工具：tmux, htop, jq, tree, ripgrep, fzf, bat, fd-find, tldr
+  - 网络工具：dig, dnsutils, netcat, nmap, traceroute, mtr, iputils-ping, telnet, nethogs, iftop, tcpdump, iperf3, ss, net-tools
 - SSH 服务器支持远程连接
 - 非 root 用户支持 (默认用户名: vscode)
 - 自动重启策略 (unless-stopped)
 - SSH 公钥免密登录支持
+- zsh 默认 shell
 - Claude Code 配置持久化
+- Git 配置持久化
+- Go env 持久化
 
 ## 快速开始
 
@@ -36,6 +43,7 @@ docker build -t vscode-remote .
 ### 3. VS Code Remote 连接
 
 编辑 `~/.ssh/config`：
+
 ```
 Host vscode-remote
     HostName localhost
@@ -53,11 +61,14 @@ Host vscode-remote
 - `pip-cache/` - pip 缓存
 - `npm/` - npm 包
 - `go/` - Go 包
+- `go-env/` - Go env 配置
+- `git-config/` - Git 配置
 - `workspace/` - 开发代码目录
 - `project/` - 项目目录
 - `vscode-server/` - VS Code Server (避免重复下载)
 - `claude/` - Claude Code 配置
 - `ssh-keys/` - SSH 公钥 (免密登录)
+- `py-venvs/` - Python 虚拟环境
 
 ## SSH 免密登录
 
@@ -67,7 +78,7 @@ Host vscode-remote
 # 1. 复制公钥到持久化目录
 cp ~/.ssh/id_xxx.pub ~/.vscode-remote/ssh-keys/
 
-# 2. 重启容器（或使用 make restart）
+# 2. 重启容器
 ./start.sh
 ```
 
@@ -103,27 +114,10 @@ cp ~/.ssh/id_xxx.pub ~/.vscode-remote/ssh-keys/
 ./start.sh SSH_PORT=2223 ROOT_PASSWORD=mypass
 ```
 
-## 其他命令
-
-```bash
-make help        # 查看帮助
-make build        # 构建镜像
-make stop         # 停止容器
-make restart      # 重启容器
-make clean        # 删除容器
-make ssh          # 进入容器
-make logs         # 查看日志
-```
-
-## 默认登录信息
-
-| 用户名 | 密码 |
-|--------|------|
-| root   | root  |
-
 ## 注意事项
 
 - 生产环境请修改默认密码或使用 SSH 公钥认证
 - 默认 SSH 端口为 2222，可根据需要修改
 - 时区设置为 Asia/Shanghai，可在 Dockerfile 中修改 `TZ` 环境变量
 - Claude Code 配置会自动从 `~/.claude/settings.json` 复制到持久化目录
+- Git 配置会自动从 `~/.gitconfig` 复制到持久化目录
