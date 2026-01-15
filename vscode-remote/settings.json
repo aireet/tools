@@ -1,0 +1,29 @@
+{
+  "env": {
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-4.7",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-4.7",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.7"
+  },
+  "permissions": {
+    "deny": [
+      "Bash(rm:-rf:*)",
+      "Bash(git:push:--force)"
+    ]
+  },
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path'); case $FILE in *.go) gofmt -w $FILE 2>&1 && goimports -w $FILE 2>&1 && jq -n --arg f \"$FILE\" '{message: (\"Formatted: \" + $f)}' ;; *) jq -n '[]' ;; esac"
+          }
+        ]
+      }
+    ]
+  }
+}

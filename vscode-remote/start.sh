@@ -14,6 +14,13 @@ ROOT_PASSWORD=${1:-root}
 # 持久化目录
 DATA_DIR="$HOME/.vscode-remote"
 
+# Claude Code
+ANTHROPIC_BASE_URL=""
+ANTHROPIC_AUTH_TOKEN=""
+ANTHROPIC_DEFAULT_SONNET_MODEL=""
+ANTHROPIC_DEFAULT_OPUS_MODEL=""
+ANTHROPIC_DEFAULT_HAIKU_MODEL=""
+
 # 创建持久化目录
 echo "创建持久化目录..."
 mkdir -p "$DATA_DIR/pip"
@@ -25,6 +32,11 @@ mkdir -p "$DATA_DIR/project"
 mkdir -p "$DATA_DIR/vscode-server"
 mkdir -p "$DATA_DIR/claude"
 mkdir -p "$DATA_DIR/ssh-keys"
+
+# 复制 Claude Code settings
+if [ ! -f "$DATA_DIR/claude/settings.json" ]; then
+    cp ~/.claude/settings.json "$DATA_DIR/claude/settings.json"
+fi
 
 # 停止并删除已存在的容器
 if docker ps -a | grep -q $CONTAINER_NAME; then
