@@ -104,8 +104,8 @@ RUN mkdir -p /var/run/sshd /root/.ssh/authorized_keys.d \
     && echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config \
     && echo 'AuthorizedKeysFile /root/.ssh/authorized_keys.d/keys' >> /etc/ssh/sshd_config
 
-# Set root password (change this for production!)
-RUN echo 'root:root' | chpasswd
+# Note: Root password not set in Docker containers - root is already accessible
+# For production, use SSH keys instead of password authentication
 
 # Expose SSH port
 EXPOSE 22

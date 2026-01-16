@@ -71,8 +71,6 @@ docker run -d \
     -v $DATA_DIR/ssh-keys:/root/.ssh/authorized_keys.d:ro \
     -e ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL} \
     -e ANTHROPIC_AUTH_TOKEN=${ANTHROPIC_AUTH_TOKEN} \
-
-    --hostname vscode-remote \
     $IMAGE_NAME
 
 # 设置 root 密码 (如果与默认密码不同)
