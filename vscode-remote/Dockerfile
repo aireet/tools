@@ -44,11 +44,19 @@ RUN apt-get update && apt-get install -y \
     gnupg lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Rust via rustup
+# Install Rust via rustup with China mirror
+ENV RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static \
+    RUSTUP_UPDATE_ROOT=https://mirrors.sjtug.sjtu.edu.cn/rust-static/rustup
 RUN -- sh -c 'curl --proto =https https://sh.rustup.rs | sh' && \
     . "$HOME/.cargo/env" && \
     rustup default stable && \
-    rustup component add rust-src rust-analyzer clippy rustfmt
+    rustup component add rust-src rust-analyzer clippy rustfmt && \
+    # Configure Cargo to use China mirror
+    mkdir -p "$HOME/.cargo" && \
+    echo '[source.crates-io]' > "$HOME/.cargo/config" && \
+    echo 'replace-with = "sjtu"' >> "$HOME/.cargo/config" && \
+    echo '[source.sjtu]' >> "$HOME/.cargo/config" && \
+    echo 'registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"' >> "$HOME/.cargo/config"
 
 # Install Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
@@ -63,12 +71,17 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /
 
 # Install Go
 ENV GO_VERSION=1.25.0
+
 RUN wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
     rm -rf /usr/local/go && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
     rm go${GO_VERSION}.linux-amd64.tar.gz && \
     ln -s /usr/local/go/bin/go /usr/local/bin/go && \
     ln -s /usr/local/go/bin/gofmt /usr/local/bin/gofmt
+
+RUN go ENV -w \
+    GO111MODULE=on \
+    GOPROXY=https://goproxy.cn,direct
 
 # Create a non-root user with sudo access
 ARG USERNAME=vscode
