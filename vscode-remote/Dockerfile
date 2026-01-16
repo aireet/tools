@@ -27,17 +27,13 @@ RUN apt-get update && apt-get install -y \
     htop \
     jq \
     tree \
-    ripgrep \
-    fzf \
-    bat \
     fd-find \
-    tldr \
     \
-    dig dnsutils netcat \
+    dnsutils  \
     nmap traceroute mtr \
     iputils-ping telnet \
     nethogs iftop tcpdump iperf3 \
-    ss net-tools \
+    iproute2 net-tools \
     \
     build-essential \
     python3 python3-pip python3-venv \
